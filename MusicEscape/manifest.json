@@ -2,12 +2,9 @@
   "$schema": "https://raw.githubusercontent.com/nike4613/ModSaber-MetadataFileSchema/master/Schema.json",
   "id": "MusicEscape",
   "name": "MusicEscape",
-  "author": "",
-  "version": "0.0.1",
-  "description": "",
+  "author": "Zingabopp",
+  "version": "1.0.0",
+  "description": "Intended to make mod testing easier. Press Escape to exit a song.",
   "gameVersion": "1.6.2",
-  "dependsOn": {
-
-  },
   "features": []
 }

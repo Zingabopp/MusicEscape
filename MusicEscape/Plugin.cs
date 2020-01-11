@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using IPA;
-using IPA.Config;
-using IPA.Utilities;
-using Harmony;
+﻿using IPA;
 using UnityEngine.SceneManagement;
 using UnityEngine;
 using IPALogger = IPA.Logging.Logger;
@@ -15,36 +7,14 @@ namespace MusicEscape
 {
     public class Plugin : IBeatSaberPlugin, IDisablablePlugin
     {
-        // TODO: Change YourGitHub to the name of your GitHub account, or use the form "com.company.project.product"
-        public const string HarmonyId = "com.github.YourGitHub.MusicEscape";
-        public const string SongCoreHarmonyId = "com.kyle1413.BeatSaber.SongCore";
-        internal static HarmonyInstance harmony;
         internal static string Name => "MusicEscape";
-        internal static Ref<PluginConfig> config;
-        internal static IConfigProvider configProvider;
+        internal static IPALogger log;
 
-        public void Init(IPALogger logger, [Config.Prefer("json")] IConfigProvider cfgProvider)
+        internal PauseManager PauseManager;
+
+        public void Init(IPALogger logger)
         {
-            Logger.log = logger;
-            Logger.log.Debug("Logger initialised.");
-
-            configProvider = cfgProvider;
-
-            config = configProvider.MakeLink<PluginConfig>((p, v) =>
-            {
-                // Build new config file if it doesn't exist or RegenerateConfig is true
-                if (v.Value == null || v.Value.RegenerateConfig)
-                {
-                    Logger.log.Debug("Regenerating PluginConfig");
-                    p.Store(v.Value = new PluginConfig()
-                    {
-                        // Set your default settings here.
-                        RegenerateConfig = false
-                    });
-                }
-                config = v;
-            });
-            harmony = HarmonyInstance.Create(HarmonyId);
+            log = logger;
         }
         #region IDisablable
 
@@ -53,7 +23,7 @@ namespace MusicEscape
         /// </summary>
         public void OnEnable()
         {
-            ApplyHarmonyPatches();
+            PauseManager = new GameObject("MusicEscapePauseManager").AddComponent<PauseManager>();
         }
 
         /// <summary>
@@ -62,43 +32,10 @@ namespace MusicEscape
         /// </summary>
         public void OnDisable()
         {
-            RemoveHarmonyPatches();
+            if (PauseManager != null)
+                GameObject.Destroy(PauseManager);
         }
         #endregion
-
-        /// <summary>
-        /// Attempts to apply all the Harmony patches in this assembly.
-        /// </summary>
-        public static void ApplyHarmonyPatches()
-        {
-            try
-            {
-                Logger.log.Debug("Applying Harmony patches.");
-                harmony.PatchAll(Assembly.GetExecutingAssembly());
-            }
-            catch (Exception ex)
-            {
-                Logger.log.Critical("Error applying Harmony patches: " + ex.Message);
-                Logger.log.Debug(ex);
-            }
-        }
-
-        /// <summary>
-        /// Attempts to remove all the Harmony patches that used our HarmonyId.
-        /// </summary>
-        public static void RemoveHarmonyPatches()
-        {
-            try
-            {
-                // Removes all patches with this HarmonyId
-                harmony.UnpatchAll(HarmonyId);
-            }
-            catch (Exception ex)
-            {
-                Logger.log.Critical("Error removing Harmony patches: " + ex.Message);
-                Logger.log.Debug(ex);
-            }
-        }
 
         /// <summary>
         /// Called when the active scene is changed.
@@ -125,7 +62,6 @@ namespace MusicEscape
 
         public void OnApplicationQuit()
         {
-            Logger.log.Debug("OnApplicationQuit");
 
         }
 
