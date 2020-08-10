@@ -14,8 +14,8 @@ namespace MusicEscape
 
         public bool IsGameScene => SceneManager.GetActiveScene().name == "GameCore";
 
-        private PauseMenuManager _pauseMenuManager;
-        private PauseMenuManager PauseMenuManager
+        private static PauseMenuManager _pauseMenuManager;
+        private static PauseMenuManager PauseMenuManager
         {
             get
             {
@@ -26,8 +26,8 @@ namespace MusicEscape
             set { _pauseMenuManager = value; }
         }
 
-        private GamePause _gamePause;
-        private GamePause GamePause
+        private static GamePause _gamePause;
+        private static GamePause GamePause
         {
             get
             {
@@ -47,17 +47,31 @@ namespace MusicEscape
         private void Awake()
         {
             if (instance != null)
+            {
+                Plugin.log.Warn("Instance of PauseManager already exists.");
                 DestroyImmediate(this);
+            }
             instance = this;
-            DontDestroyOnLoad(this);
         }
+
+#if DEBUG
+        private void Start()
+        {
+            Plugin.log.Debug("PauseManager active.");
+        }
+
+        private void OnDisable()
+        {
+            Plugin.log.Debug("PauseManager disabled.");
+        }
+#endif
 
         /// <summary>
         /// Called every frame if the script is enabled.
         /// </summary>
         private void Update()
         {
-            if (IsGameScene && Input.GetKeyDown(KeyCode.Escape))
+            if (Input.GetKeyDown(KeyCode.Escape))
             {
                 Plugin.log.Info("Forcing song exit.");
                 GamePause.Pause();
@@ -66,26 +80,13 @@ namespace MusicEscape
         }
 
         /// <summary>
-        /// Called when the script becomes enabled and active
-        /// </summary>
-        private void OnEnable()
-        {
-
-        }
-
-        /// <summary>
-        /// Called when the script becomes disabled or when it is being destroyed.
-        /// </summary>
-        private void OnDisable()
-        {
-
-        }
-
-        /// <summary>
         /// Called when the script is being destroyed.
         /// </summary>
         private void OnDestroy()
         {
+#if DEBUG
+            Plugin.log.Debug("Destroying PauseManager");
+#endif
             instance = null;
         }
         #endregion
