@@ -1,0 +1,8 @@
+::from ./bsinstalldir.txt
+
+"Beat Saber_Data/Managed/
+""Main.dll?virt?alias=Beat Saber_Data\Managed\Main.dll
+""UnityEngine.
+"""dll?alias=Beat Saber_Data\Managed\UnityEngine.dll
+"""CoreModule.dll?alias=Beat Saber_Data\Managed\UnityEngine.CoreModule.dll
+"""InputLegacyModule.dll?alias=Beat Saber_Data\Managed\UnityEngine.InputLegacyModule.dll

@@ -186,6 +186,7 @@ PublishScripts/
 **/[Pp]ackages/*
 # except build/, which is used as an MSBuild target.
 !**/[Pp]ackages/build/
+!**/packages/BeatSaberModdingTools.Tasks*.nupkg
 # Uncomment if necessary however generally it will be regenerated when needed
 #!**/[Pp]ackages/repositories.config
 # NuGet v3's project.json files produces more ignorable files
@@ -338,3 +339,7 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
+/bsinstalldir.txt
+/Refs/Beat Saber_Data/Managed/*
+!Refs/Beat Saber_Data/Managed/IPA*
+/Refs/Plugins/OBSControl.dll
