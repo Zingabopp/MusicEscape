@@ -100,8 +100,8 @@ namespace MusicEscape
             {
                 if (IsPaused)
                 {
+                    Plugin.log.Info("Resuming song.");
                     PauseMenuManager.ContinueButtonPressed();
-                    //GamePause.Resume();
                     return;
                 }
                 GamePause.Pause();
@@ -119,6 +119,8 @@ namespace MusicEscape
             }
             else if (Input.GetKeyDown(KeyCode.F1))
             {
+                if (!IsPaused)
+                    Plugin.log.Info("Pausing song.");
                 GamePause.Pause();
                 PauseMenuManager.ShowMenu();
             }
