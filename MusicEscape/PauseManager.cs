@@ -38,9 +38,35 @@ namespace MusicEscape
             set { _gamePause = value; }
         }
 
+        private void SetEvents(GamePause gamePause)
+        {
+            if (gamePause == null) return;
+            RemoveEvents(gamePause);
+            GamePause.didPauseEvent += OnGamePaused;
+            GamePause.didResumeEvent += OnGameResumed;
+        }
+
+        private void RemoveEvents(GamePause gamePause)
+        {
+            if (gamePause == null) return;
+            GamePause.didPauseEvent -= OnGamePaused;
+            GamePause.didResumeEvent -= OnGameResumed;
+        }
+
+        private void OnGameResumed()
+        {
+            IsPaused = false;
+        }
+
+        private void OnGamePaused()
+        {
+            IsPaused = true;
+        }
+
 
 
         #region Monobehaviour Messages
+        public bool IsPaused { get; private set; }
         /// <summary>
         /// Only ever called once, mainly used to initialize variables.
         /// </summary>
@@ -54,17 +80,16 @@ namespace MusicEscape
             instance = this;
         }
 
-#if DEBUG
         private void Start()
         {
             Plugin.log.Debug("PauseManager active.");
+            SetEvents(GamePause);
         }
 
         private void OnDisable()
         {
             Plugin.log.Debug("PauseManager disabled.");
         }
-#endif
 
         /// <summary>
         /// Called every frame if the script is enabled.
@@ -73,12 +98,29 @@ namespace MusicEscape
         {
             if (Input.GetKeyDown(KeyCode.Escape))
             {
-                Plugin.log.Info("Forcing song exit.");
+                if (IsPaused)
+                {
+                    PauseMenuManager.ContinueButtonPressed();
+                    //GamePause.Resume();
+                    return;
+                }
                 GamePause.Pause();
+
                 if (Input.GetKey(KeyCode.LeftShift))
+                {
                     PauseMenuManager.RestartButtonPressed();
+                    Plugin.log.Info("Forcing song restart.");
+                }
                 else
+                {
                     PauseMenuManager.MenuButtonPressed();
+                    Plugin.log.Info("Forcing song exit.");
+                }
+            }
+            else if (Input.GetKeyDown(KeyCode.F1))
+            {
+                GamePause.Pause();
+                PauseMenuManager.ShowMenu();
             }
         }
 
