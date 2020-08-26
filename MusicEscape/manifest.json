@@ -6,5 +6,8 @@
   "version": "2.1.0",
   "description": "Intended to make mod testing easier. Press Escape to exit a song.",
   "gameVersion": "1.11.1",
+  "links": {
+    "project-source": "https://github.com/Zingabopp/MusicEscape"
+  },
   "features": []
 }
