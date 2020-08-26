@@ -75,7 +75,10 @@ namespace MusicEscape
             {
                 Plugin.log.Info("Forcing song exit.");
                 GamePause.Pause();
-                PauseMenuManager.MenuButtonPressed();
+                if (Input.GetKey(KeyCode.LeftShift))
+                    PauseMenuManager.RestartButtonPressed();
+                else
+                    PauseMenuManager.MenuButtonPressed();
             }
         }
 
