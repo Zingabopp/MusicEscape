@@ -98,15 +98,10 @@ namespace MusicEscape
         {
             if (Input.GetKeyDown(KeyCode.Escape))
             {
-                if (IsPaused)
-                {
-                    Plugin.log.Info("Resuming song.");
-                    PauseMenuManager.ContinueButtonPressed();
-                    return;
-                }
-                GamePause.Pause();
+                if (!IsPaused)
+                    GamePause.Pause();
 
-                if (Input.GetKey(KeyCode.LeftShift))
+                if (Input.GetKey(KeyCode.LeftShift) && !IsPaused)
                 {
                     PauseMenuManager.RestartButtonPressed();
                     Plugin.log.Info("Forcing song restart.");
@@ -117,12 +112,19 @@ namespace MusicEscape
                     Plugin.log.Info("Forcing song exit.");
                 }
             }
-            else if (Input.GetKeyDown(KeyCode.F1))
+            else if (Input.GetKeyDown(KeyCode.F2))
             {
                 if (!IsPaused)
+                {
                     Plugin.log.Info("Pausing song.");
-                GamePause.Pause();
-                PauseMenuManager.ShowMenu();
+                    GamePause.Pause();
+                    PauseMenuManager.ShowMenu();
+                }
+                else
+                {
+                    Plugin.log.Info("Unpausing song.");
+                    PauseMenuManager.ContinueButtonPressed();
+                }
             }
         }
 
