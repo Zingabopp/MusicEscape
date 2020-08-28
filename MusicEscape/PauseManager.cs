@@ -101,7 +101,7 @@ namespace MusicEscape
                 if (!IsPaused)
                     GamePause.Pause();
 
-                if (Input.GetKey(KeyCode.LeftShift) && !IsPaused)
+                if (Input.GetKey(KeyCode.LeftShift))
                 {
                     PauseMenuManager.RestartButtonPressed();
                     Plugin.log.Info("Forcing song restart.");
