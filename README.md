@@ -6,5 +6,5 @@ Original by Squeaksies: https://github.com/squeaksies/MusicEscape
 # Usage
 * Press `Escape` to exit song.
 * Press `Left Shift + Escape` to restart song.
-* Press `F1` to pause the song and show the pause menu.
-  * Press `Escape` while paused to resume.
+* Press `F2` to pause the song and show the pause menu.
+  * Press `F2` while paused to resume.
