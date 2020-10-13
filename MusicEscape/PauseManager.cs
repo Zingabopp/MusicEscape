@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -26,31 +27,31 @@ namespace MusicEscape
             set { _pauseMenuManager = value; }
         }
 
-        private static GamePause _gamePause;
-        private static GamePause GamePause
+        private static PauseController _pauseController;
+        private static PauseController PauseController
         {
             get
             {
-                if (_gamePause == null)
-                    _gamePause = Resources.FindObjectsOfTypeAll<GamePause>().First();
-                return _gamePause;
+                if (_pauseController == null)
+                    _pauseController = Resources.FindObjectsOfTypeAll<PauseController>().First();
+                return _pauseController;
             }
-            set { _gamePause = value; }
+            set { _pauseController = value; }
         }
 
-        private void SetEvents(GamePause gamePause)
+        private void SetEvents(PauseController gamePause)
         {
             if (gamePause == null) return;
             RemoveEvents(gamePause);
-            GamePause.didPauseEvent += OnGamePaused;
-            GamePause.didResumeEvent += OnGameResumed;
+            gamePause.didPauseEvent += OnGamePaused;
+            gamePause.didResumeEvent += OnGameResumed;
         }
 
-        private void RemoveEvents(GamePause gamePause)
+        private void RemoveEvents(PauseController gamePause)
         {
             if (gamePause == null) return;
-            GamePause.didPauseEvent -= OnGamePaused;
-            GamePause.didResumeEvent -= OnGameResumed;
+            gamePause.didPauseEvent -= OnGamePaused;
+            gamePause.didResumeEvent -= OnGameResumed;
         }
 
         private void OnGameResumed()
@@ -83,7 +84,7 @@ namespace MusicEscape
         private void Start()
         {
             Plugin.log.Debug("PauseManager active.");
-            SetEvents(GamePause);
+            SetEvents(PauseController);
         }
 
         private void OnDisable()
@@ -99,7 +100,7 @@ namespace MusicEscape
             if (Input.GetKeyDown(KeyCode.Escape))
             {
                 if (!IsPaused)
-                    GamePause.Pause();
+                    PauseController.Pause();
 
                 if (Input.GetKey(KeyCode.LeftShift))
                 {
@@ -117,7 +118,7 @@ namespace MusicEscape
                 if (!IsPaused)
                 {
                     Plugin.log.Info("Pausing song.");
-                    GamePause.Pause();
+                    PauseController.Pause();
                     PauseMenuManager.ShowMenu();
                 }
                 else
